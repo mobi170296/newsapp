@@ -13,7 +13,7 @@
                 if (ViewBag.user.HaveRole(NewsApplication.Models.User.ADMIN))
                 {
                     <div>
-                        @Html.ActionLink("Quản trị hệ thống", "Index", "Admin")
+                        @Html.ActionLink("Quản lý danh mục", "Index", "CategoryManage") | @Html.ActionLink("Quản người dùng", "Index", "UserManage")
                     </div>
                 }
 

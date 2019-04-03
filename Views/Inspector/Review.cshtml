@@ -1,19 +1,18 @@
 ﻿@model NewsApplication.Models.Post
 
 @{
-    ViewBag.Title = Model.title;
+    ViewBag.Title = "Xem thử " + Model.title;
 }
 
 <div>
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-    }
+
     <div class="artical">
+        <div class="preview" style="background-image: url('@Model.poster.path')"></div>
         <div class="title">
             <h1>@Model.title</h1>
         </div>
         <div class="info">
+            <div class="@(Model.IsHidden() ? "text-danger" : "text-success")">@(Model.IsHidden() ? "[Chưa duyệt]" : "[Đã duyệt]")</div>
             <div><label>Đăng bởi: </label> <span>@Model.journalist.lastname @Model.journalist.firstname</span></div>
             <div class="createtime">@Model.created_time</div>
         </div>
@@ -26,6 +25,9 @@
     </div>
 
     <div>
-        @Html.ActionLink("Về Trang chủ", "Index", "Home", new {}, new { @class = "btn btn-link" })
+        @if (Context.Request.UrlReferrer != null)
+        {
+             @Html.Raw("<a class=\"btn btn-link\" href=\" " + Context.Request.UrlReferrer + "\">trở về</a>")
+        }
     </div>
 </div>

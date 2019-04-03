@@ -1,0 +1,61 @@
+﻿@using NewsApplication.Models
+
+@{
+    ViewBag.Title = "Danh sách Tin tức chưa được kiểm duyệt";
+}
+
+<div class="row m-4">
+    <div class=" col-3">
+        <div class="left-menu">
+            <div class="left-menu-item active">
+                <a href="@Url.Action("NoApprovedList", "Inspector")">Bài chưa duyệt</a>
+            </div>
+
+            <div class="left-menu-item">
+                <a href="@Url.Action("ApprovedList", "Inspector")">Bài đã duyệt</a>
+            </div>
+
+        </div>
+    </div>
+    <div class=" col-9">
+        <div class="right-content">
+            <div class="card">
+                <div class="card-header"><h4 class="text-danger">Bài chưa được duyệt</h4></div>
+                <div class="card-body">
+                    @if (ViewBag.posts.Count == 0)
+                    {
+                        <div class="alert alert-info">Danh sách rỗng</div>
+                    }
+                    else
+                    {
+                        <table class="table table-striped table-bordered">
+                        <tr>
+                            <th>Tiêu đề</th>
+                            <th>Danh mục</th>
+                            <th>Tóm tắt</th>
+                            <th>Thời gian đăng</th>
+                            <th>Người đăng</th>
+                            <th>Thao tác</th>
+                        </tr>
+                        @foreach (Post post in ViewBag.posts)
+                        {
+                            <tr>
+                                <td>@post.title</td>
+                                <td>@post.category.name</td>
+                                <td>@post.summary</td>
+                                <td>@post.created_time</td>
+                                <td class="text-nowrap">@post.journalist.lastname @post.journalist.firstname</td>
+                                <td>@Html.ActionLink("Xem rồi duyệt", "ViewToApprove", "Inspector", new{id = post.id}, new  {@class  = "btn btn-primary text-nowrap" })</td>
+                            </tr>
+                        }
+                        </table>
+                        <div class="text-center">
+                            @Html.Partial("PagePartition", (NewsApplication.Models.PagePartitionModel)ViewBag.pagepartition)
+                        </div>
+                    }
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

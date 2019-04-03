@@ -1,0 +1,39 @@
+﻿@model NewsApplication.Models.Post
+
+@{
+    ViewBag.Title = "Xem để duyệt - " + Model.title;
+}
+
+<div>
+
+    <div class="artical">
+        <div class="preview" style="background-image: url('@Model.poster.path')"></div>
+        <div class="title">
+            <h1>@Model.title</h1>
+        </div>
+        <div class="info">
+            <div class="@(Model.IsHidden() ? "text-danger" : "text-success")">@(Model.IsHidden() ? "[Chưa duyệt]" : "[Đã duyệt]")</div>
+            <div><label>Đăng bởi: </label> <span>@Model.journalist.lastname @Model.journalist.firstname</span></div>
+            <div class="createtime">@Model.created_time</div>
+        </div>
+        <div class="summary">
+            @Model.summary
+        </div>
+        <div class="content">
+            @Html.Raw(Model.content)
+        </div>
+    </div>
+    <div>
+        <form action="@Url.Action("Approve")" method="post" enctype="application/x-www-form-urlencoded">
+            <input type="hidden" name="id" value="@Model.id" />
+            <button type="submit" class="btn btn-outline-success">Thực hiện duyệt</button>
+        </form>
+    </div>
+    <div>
+        @if (Context.Request.UrlReferrer != null)
+        {
+            @Html.Raw("<a class=\"btn btn-link\" href=\" " + Context.Request.UrlReferrer + "\">trở về</a>")
+        }
+    </div>
+</div>
+

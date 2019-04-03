@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using NewsApplication.Models;
 using NewsApplication.Library.Database;
 
-namespace News.Controllers
+namespace NewsApplication.Controllers
 {
     public class PostsController : Controller
     {

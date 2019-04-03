@@ -1,0 +1,60 @@
+﻿@using NewsApplication.Models
+@{
+    ViewBag.Title = "Quản lý người dùng";
+}
+
+<div>
+    @if (ViewBag.users.Count == 0)
+    {
+        <div class="alert alert-danger">Danh sách người dùng rỗng</div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>ID</th>
+                <th>Tên đăng nhập</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Quyền hạn</th>
+                <th>Thao tác</th>
+            </tr>
+            @foreach (User user in ViewBag.users)
+            {
+                <tr>
+                    <td>@user.id</td>
+                    <td>@user.username</td>
+                    <td>@user.lastname @user.firstname</td>
+                    <td>@user.email</td>
+                    <td>@user.phone</td>
+                    <td>
+                        @switch (user.role)
+                        {
+                            case NewsApplication.Models.User.ADMIN:
+                                <span class="text-danger">@user.GetRoleName()</span>
+                                break;
+
+                            case NewsApplication.Models.User.JOURNALIST:
+                                <span class="text-success">@user.GetRoleName()</span>
+                                break;
+                                
+                            case NewsApplication.Models.User.NORMAL:
+                                <span class="text-black-50">@user.GetRoleName()</span>
+                                break;
+                                
+                            case NewsApplication.Models.User.INSPECTOR:
+                                <span class="text-warning">@user.GetRoleName()</span>
+                                break;
+                        }
+                    </td>
+                    <td>@Html.ActionLink("Phân quyền", "GrantRole", "UserManage", new {id = user.id}, new { @class = "btn btn-info" }) @Html.ActionLink("Xóa", "Delete", "UserManage", new { id = user.id }, new { @class = "btn btn-danger" })</td>
+                </tr>
+            }
+        </table> 
+        
+        <div class="text-center">
+            @Html.Partial("pagepartition", (NewsApplication.Models.PagePartitionModel)ViewBag.pagepartition)
+        </div>
+    }
+</div>

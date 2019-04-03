@@ -48,6 +48,22 @@ namespace NewsApplication.Models
         {
             return this.role == role;
         }
+        public string GetRoleName()
+        {
+            switch (this.role)
+            {
+                case ADMIN:
+                    return "Quản trị viên";
+                case JOURNALIST:
+                    return "Người đăng bài";
+                case INSPECTOR:
+                    return "Người duyệt";
+                case NORMAL:
+                    return "Người dùng thông thường";
+                default:
+                    return "";
+            }
+        }
         public bool CheckValid()
         {
             //Check username: Min: 6, Max: 50 Regex

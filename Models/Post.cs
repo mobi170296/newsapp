@@ -338,5 +338,23 @@ namespace NewsApplication.Models
         {
             return this.valid == 0;
         }
+        public bool Approve()
+        {
+            this.connection.Update("post", new SortedList<string, IDBDataType>()
+            {
+                {"valid", new DBNumber(1)},
+                {"inspector_id", new DBNumber(this.inspector_id)}
+            }, "id=" + this.id);
+            return true;
+        }
+        public bool DisApprove()
+        {
+            this.connection.Update("post", new SortedList<string, IDBDataType>()
+            {
+                {"valid", new DBNumber(0)},
+                {"inspector_id", new DBNumber(this.inspector_id)}
+            }, "id=" + this.id);
+            return true;
+        }
     }
 }

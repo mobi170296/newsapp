@@ -14,7 +14,6 @@ namespace NewsApplication.Controllers
 {
     public class PostManageController : Controller
     {
-        // GET: PostManage
         public ActionResult Index(int page = 1)
         {
             IDatabaseUtility connection = new MySQLUtility();

@@ -11,7 +11,7 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>News</RootNamespace>
+    <RootNamespace>NewsApplication</RootNamespace>
     <AssemblyName>News</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
@@ -205,6 +205,7 @@
     <Compile Include="Controllers\PostManageController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserManageController.cs" />
     <Compile Include="Exception\InputException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -225,6 +226,7 @@
     <Compile Include="Models\PostImage.cs" />
     <Compile Include="Models\PostListModel.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -260,6 +262,13 @@
     <Content Include="Views\Shared\_errors.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\PostManage\Update.cshtml" />
+    <Content Include="Views\Inspector\NoApprovedList.cshtml" />
+    <Content Include="Views\Inspector\ApprovedList.cshtml" />
+    <Content Include="Views\Inspector\ViewToApprove.cshtml" />
+    <Content Include="Views\Inspector\Review.cshtml" />
+    <Content Include="Views\UserManage\Index.cshtml" />
+    <Content Include="Views\UserManage\GrantRole.cshtml" />
+    <Content Include="Views\UserManage\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
