@@ -1,0 +1,54 @@
+﻿@using NewsApplication.Models
+
+
+@{ 
+    ViewBag.Title = "Quản lý tin ";
+}
+
+<div class="">
+    <div class="card">
+        <div class="card-header">
+            <h3>Quản lý tin tức</h3>
+        </div>
+        <div class="card-body">
+            @if(TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+            @Html.ActionLink("Đăng tin tức", "Add", "PostManage", new { @class = "btn btn-primary mt-3 mb-3" })
+            @if (ViewBag.posts == null || ViewBag.posts.Count == 0)
+            {
+                <div class="alert alert-info">Bạn chưa có bài nào! Hãy đăng thử xem!</div>
+            }
+            else
+            {
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Trạng thái</th>
+                        <th>Tiêu đề bài</th>
+                        <th>Tóm tắt nội dung</th>
+                        <th>Danh mục</th>
+                        <th>Tạo lúc</th>
+                        <th>Sửa lúc</th>
+                        <th>Thao tác</th>
+                    </tr>
+                    @foreach(Post post in ViewBag.posts)
+                    {
+                        <tr>
+                            <td><a class="btn btn-link" href="@Url.Action("Index", "Posts", new { id = post.id})">@Html.Raw(post.IsShown() ? "<span style=\"color:green;white-space:nowrap\">Đã duyệt</span>" : "<span style=\"color:red;white-space:nowrap\">Chưa duyệt</span>")</a></td>
+                            <td>@post.title</td>
+                            <td>@post.summary</td>
+                            <td style="white-space: nowrap">@post.category.name</td>
+                            <td>@post.created_time.Hour:@post.created_time.Minute:@post.created_time.Second<br/>@post.created_time.Day/@post.created_time.Month/@post.created_time.Year</td>
+                            <td>@post.modified_time.Hour:@post.modified_time.Minute:@post.modified_time.Second<br/>@post.modified_time.Day/@post.modified_time.Month/@post.modified_time.Year</td>
+                            <td>@Html.ActionLink("Sửa bài", "Update", "PostManage", new { id=post.id }, new { @class = "btn btn-primary", style="white-space:nowrap" })</td>
+                        </tr>
+                    }
+                </table>
+                <div class="text-center">
+                    @Html.Partial("PagePartition", (NewsApplication.Models.PagePartitionModel)ViewBag.pagepartition)
+                </div>
+            }
+        </div>
+    </div>
+</div>

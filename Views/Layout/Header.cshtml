@@ -1,0 +1,53 @@
+﻿@using NewsApplication.Models
+
+
+<div id="header">
+    <div id="header-logo">
+        <div id="header-info" class="u-fr clearfix">
+            <div>Hotline: 0795759696</div>
+            @if (ViewBag.user.IsLogin())
+            {
+                <div>
+                    Xin chào <a href="/User">@ViewBag.user.lastname @ViewBag.user.firstname!</a> @Html.ActionLink("Đăng xuất", "Logout", "User")
+                </div>
+                if (ViewBag.user.HaveRole(NewsApplication.Models.User.ADMIN))
+                {
+                    <div>
+                        @Html.ActionLink("Quản trị hệ thống", "Index", "Admin")
+                    </div>
+                }
+
+                if (ViewBag.user.HaveRole(NewsApplication.Models.User.JOURNALIST))
+                {
+                    <div>
+                        @Html.ActionLink("Quản lý bài báo", "Index", "PostManage")
+                    </div>
+                }
+                if (ViewBag.user.HaveRole(NewsApplication.Models.User.INSPECTOR))
+                {
+                    <div>
+                        @Html.ActionLink("Rà soát bài đăng", "Index", "Inspector")
+                    </div>
+                }
+            }
+            else
+            {
+                <div>@Html.ActionLink("Đăng nhập", "Login", "User") | @Html.ActionLink("Đăng ký", "Register", "User")</div>
+            }
+
+
+        </div>
+        <a id="header-logo-img" href="/"></a>
+    </div>
+    <div id="main-menu">
+        <div id="main-menu-wrapper" class="clearfix">
+            @if (ViewBag.categories != null)
+            {
+                foreach (Category category in ViewBag.categories)
+                {
+                    <div class="main-menu-item"><a href="@Url.RouteUrl(new { controller = "PostShow", action = "Index", category = category.link })">@category.name</a></div>
+                }
+            }
+        </div>
+    </div>
+</div>
