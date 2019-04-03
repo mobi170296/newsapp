@@ -41,6 +41,47 @@ namespace NewsApplication.Models
         {
             this.connection = connection;
         }
+        public bool LoadInspector()
+        {
+            this.inspector = new User(this.connection);
+            this.inspector.id = this.inspector_id;
+            if (!this.inspector.Load())
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool LoadJournalist()
+        {
+            this.journalist = new User(this.connection);
+            this.journalist.id = this.journalist_id;
+            if (!this.journalist.Load())
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool LoadPoster()
+        {
+            this.poster = new PostImage(this.connection);
+            using (IDataReader result = this.connection.select("*").from("postimage").where("post_id=" + this.id).Execute())
+            {
+                if (!result.Read())
+                {
+                    return false;
+                }
+                this.poster.id = (int)result["id"];
+            }
+            if (!this.poster.Load())
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool LoadCategory()
+        {
+            return true;
+        }
         public void AddErrorMessage(string name,string value)
         {
             this.errorsmap[name] = value;
@@ -86,7 +127,7 @@ namespace NewsApplication.Models
         }
         public Post CheckValidForSummary()
         {
-            if(this.summary == null || this.summary.Length> 200)
+            if(this.summary == null || this.summary.Length> 512)
             {
                 this.errorsmap["summary"] = "Tóm tắt bài viết không hợp lệ!";
             }
@@ -117,6 +158,36 @@ namespace NewsApplication.Models
             {
                 this.summary = this.summary.Replace(@"\", @"\\").Replace(@"'", @"\'");
             }
+        }
+        public bool LoadPost()
+        {
+            using (MySqlDataReader result = (MySqlDataReader)this.connection.select("*").from("post").where("id=" + new DBNumber(this.id).SqlValue()).Execute())
+            {
+                if (result.Read())
+                {
+                    this.journalist_id = result.GetInt32("journalist_id");
+                    this.category_id = result.GetInt32("category_id");
+                    this.content = result.GetString("content");
+                    this.title = result.GetString("title");
+                    this.created_time = result.GetDateTime("created_time");
+                    this.valid = result.GetInt32("valid");
+                    try
+                    {
+                        this.inspector_id = result.GetInt32("inspector_id");
+                    }
+                    catch
+                    {
+                        this.inspector_id = -1;
+                    }
+                    this.modified_time = result.GetDateTime("modified_time");
+                    this.summary = result.GetString("summary");
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         public bool Load()
         {
@@ -229,12 +300,12 @@ namespace NewsApplication.Models
         }
         public bool Update(Post newdata)
         {
-            this.Standardization();
+            newdata.Standardization();
             return this.connection.Update("post", new SortedList<string, IDBDataType>()
             {
                 {"content", new DBString(newdata.content) },
                 {"title", new DBString(newdata.title) },
-                {"modified_time", new DBDateTime(DateTime.Now) },
+                {"modified_time", new DBRaw("now()") },
                 {"summary", new DBString(newdata.summary) }
             },"id=" + new DBNumber(this.id).SqlValue()) != 0;
         }

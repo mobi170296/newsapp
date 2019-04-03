@@ -7,8 +7,8 @@ div.img-pro-context {
     min-width: 150px;
 }
 div.image-preview{
-    width: 300px;
-    height: 300px;
+    width: 600px;
+    height: 600px;
     margin: 5px auto;
     background-size: contain;
     border: 1px solid #eee;

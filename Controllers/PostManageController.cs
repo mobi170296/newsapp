@@ -145,7 +145,7 @@ namespace NewsApplication.Controllers
                         image.path = PostImage.POSTER_IMAGE_DIR + image.post_id + "_" + new Random().Next() + System.IO.Path.GetExtension(poster.FileName);
                         image.Add();
 
-                        poster.SaveAs(Server.MapPath(PostImage.POSTER_IMAGE_DIR + image.path));
+                        poster.SaveAs(Server.MapPath(image.path));
                         TempData["SuccessMessage"] = "Bạn đã đăng bài thành công hãy tìm nhà kiểm duyệt để duyệt bài của bạn và hiển thị nó";
                         return RedirectToAction("Index");
                     }
@@ -171,9 +171,113 @@ namespace NewsApplication.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Update(Post post)
+        [ValidateInput(false)]
+        public ActionResult Update(HttpPostedFileBase poster, Post newdata)
         {
-            return View();
+            IDatabaseUtility connection = new MySQLUtility();
+            try
+            {
+                connection.Connect();
+            }
+            catch (DBException e)
+            {
+                ViewBag.ErrorMessage = e.Message;
+                return View("_errors");
+            }
+
+            Post post = new Post(connection);
+            try
+            {
+                Authenticate authenticate = new Authenticate(connection);
+                User user = authenticate.GetUser();
+                if (user.IsLogin() && user.HaveRole(NewsApplication.Models.User.JOURNALIST))
+                {
+                    ViewBag.categories = new CategoryListModel(connection).GetAll();
+                    newdata.SetConnection(connection);
+                    post.id = newdata.id;
+                    if (post.LoadPost())
+                    {
+                        post.LoadPoster();
+                        if (post.journalist_id == user.id)
+                        {
+                            newdata.CheckValidForCategoryId().CheckValidForContent().CheckValidForSummary().CheckValidForTitle();
+
+                            if (newdata.GetErrorsMap().Count == 0)
+                            {
+                                if (post.Update(newdata))
+                                {
+                                    if (poster != null)
+                                    {
+                                        string filename = post.poster.path;
+                                        post.poster.SetConnection(connection);
+                                        if (System.IO.File.Exists(Server.MapPath(filename)))
+                                        {
+                                            System.IO.File.Delete(Server.MapPath(filename));
+                                        }
+
+                                        try
+                                        {
+                                            PostImage image = new PostImage(connection);
+                                            image.post_id = post.id;
+                                            image.path = PostImage.POSTER_IMAGE_DIR + image.post_id + "_" + new Random().Next() + System.IO.Path.GetExtension(poster.FileName);
+
+                                            post.poster.Update(image);
+                                            poster.SaveAs(Server.MapPath(image.path));
+                                        }
+                                        catch(System.Exception e)
+                                        {
+                                            ViewBag.ErrorMessage = e.Message;
+                                            ViewBag.oldtitle = post.title;
+                                            newdata.poster = post.poster;
+                                            return View(newdata);
+                                        }
+                                    }
+                                    TempData.Add("SuccessMessage", "Bạn đã cập nhật tin tức thành công!");
+                                    return RedirectToAction("Index", "PostManage");
+                                }
+                                else
+                                {
+                                    ViewBag.ErrorMessage = "Cập nhật tin tức không thành công!";
+                                    ViewBag.oldtitle = post.title;
+                                    newdata.poster = post.poster;
+                                    return View(newdata);
+                                }
+                            }
+                            else
+                            {
+                                throw new InputException(1, newdata.GetErrorsMap());
+                            }
+                        }
+                        else
+                        {
+                            ViewBag.ErrorMessage = "Tin tức này không thuộc quyền sở hữu của bạn";
+                            return View("_errors");
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Tin tức này không tồn tại!";
+                        return View("_errors");
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Bạn không có quyền truy cập vào đây";
+                    return View("_errors");
+                }
+            }
+            catch (DBException e)
+            {
+                ViewBag.ErrorMessage = e.Message;
+                return View("_errors");
+            }
+            catch (InputException e)
+            {
+                ViewBag.ErrorsMap = e.Errors;
+                ViewBag.oldtitle = post.title;
+                newdata.poster = post.poster;
+                return View(newdata);
+            }
         }
         [HttpGet]
         public ActionResult Update(int? id)
@@ -205,8 +309,13 @@ namespace NewsApplication.Controllers
                     ViewBag.categories = new CategoryListModel(connection).GetAll();
                     Post post = new Post(connection);
                     post.id = (int)id;
-                    if (post.Load())
+                    if (post.LoadPost())
                     {
+                        post.LoadInspector();
+                        post.LoadCategory();
+                        post.LoadJournalist();
+                        post.LoadPoster();
+                        ViewBag.oldtitle = post.title;
                         return View(post);
                     }
                     else

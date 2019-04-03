@@ -2,8 +2,9 @@
 @model NewsApplication.Models.Post
 
 @{
-    ViewBag.Title = "Cập nhật bài viết - ";
+    ViewBag.Title = "Cập nhật tin tức - " + ViewBag.oldtitle;
 }
+
 <script type="text/javascript" src="~/Scripts/editor.js">
 
 </script>
@@ -11,7 +12,8 @@
 <div class="">
     <div class="card">
         <div class="card-header">
-            Đăng tin mới
+            <h5>Cập nhật tin tức</h5>
+            <h4>@ViewBag.oldtitle</h4>
         </div>
         <div class="card-body">
             @if (ViewBag.ErrorMessage != null)
@@ -36,29 +38,29 @@
                         <select class="form-control custom-select" name="category_id">
                             @foreach (Category category in ViewBag.categories)
                             {
-                                <option value="@category.id" @(ViewBag.postback != null ? (ViewBag.postback.category_id == category.id ? "selected" : "") : (Model.category_id == category.id ? "selected" : "")) >@category.name</option>
+                                <option value="@category.id" @(Model.category_id == category.id ? "selected" : "")>@category.name</option>
                             }
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Tiêu đề bài</label>
-                    <input class="form-control" name="title" placeholder="Tiêu đề" value="@(ViewBag.postback != null ? ViewBag.postback.title : Model.title)" autofocus />
+                    <input class="form-control" name="title" placeholder="Tiêu đề" value="@Model.title" autofocus />
                 </div>
                 <div class="form-group">
                     <label>Tóm tắt nội dung</label>
-                    <textarea class="form-control" name="summary">@(ViewBag.postback != null ? ViewBag.postback.summary : Model.summary)</textarea>
+                    <textarea class="form-control" name="summary">@Model.summary</textarea>
                 </div>
                 <div class="form-group">
                     <label>Ảnh bìa</label>
                     <input class="form-control-file" data-role="image-preview" type="file" name="poster" />
-                    <div class="image-preview" style="background-url('@Model.poster.path')"></div>
+                    <div class="image-preview" style="background-image: url('@Model.poster.path')"></div>
                 </div>
                 <div class="form-group">
                     <label>Nội dung bài</label>
-                    <textarea name="content">@(ViewBag.postback != null ? ViewBag.postback.content : Model.content)</textarea>
+                    <textarea name="content">@Model.content</textarea>
                 </div>
-                <button class="btn btn-outline-success" type="submit">Đăng bài</button>
+                <button class="btn btn-outline-success" type="submit">Cập nhật tin tức</button> @Html.ActionLink("về danh sách tin tức", "Index", "PostManage", null, new { @class="btn btn-link" })
             </form>
         </div>
     </div>
