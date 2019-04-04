@@ -204,6 +204,7 @@
     <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="Controllers\PostManageController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
+    <Compile Include="Controllers\PostShowController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserManageController.cs" />
     <Compile Include="Exception\InputException.cs" />
@@ -269,6 +270,8 @@
     <Content Include="Views\UserManage\Index.cshtml" />
     <Content Include="Views\UserManage\GrantRole.cshtml" />
     <Content Include="Views\UserManage\Delete.cshtml" />
+    <Content Include="Views\Posts\ListByCategory.cshtml" />
+    <Content Include="Views\PostShow\ListByCategory.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

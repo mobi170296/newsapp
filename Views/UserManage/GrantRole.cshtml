@@ -1,1 +1,78 @@
-﻿
+﻿@model NewsApplication.Models.User
+@{
+    ViewBag.Title = "Cấp quyền người dùng";
+}
+
+<div>
+    <div class="card">
+        <div class="card-header">
+            <h5>Thông tin người dùng cần cấp quyền</h5>
+        </div>
+        <div class="card-body">
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+            }
+            @if (ViewBag.ErrorsMap != null && ViewBag.ErrorsMap.Count != 0)
+            {
+                <div class="alert alert-danger">
+                    @foreach (string key in ViewBag.ErrorsMap.Keys)
+                    {
+                        <div>@ViewBag.ErrorsMap[key]</div>
+                    }
+                </div>
+            }
+            <table class="table table-borderless">
+                <tr>
+                    <th class="w-25">ID</th>
+                    <td>@Model.id</td>
+                </tr>
+                <tr>
+                    <th>Tên người dùng</th>
+                    <td>@Model.username</td>
+                </tr>
+                <tr>
+                    <th>Họ</th>
+                    <td>@Model.lastname</td>
+                </tr>
+                <tr>
+                    <th>Tên</th>
+                    <td>@Model.firstname</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>@Model.email</td>
+                </tr>
+                <tr>
+                    <th>Số điện thoại</th>
+                    <td>@Model.phone</td>
+                </tr>
+                <tr>
+                    <th>Quyền hiện tại</th>
+                    <td>@Model.GetRoleName()</td>
+                </tr>
+            </table>
+
+            <div class="form-group">
+                <form action="" method="post" enctype="application/x-www-form-urlencoded">
+                    <div class="form-inline">
+                        <label class="mr-3">Chọn quyền mới</label>
+                        <select class="custom-select" name="role">
+                            <option value="@NewsApplication.Models.User.ADMIN">Quản trị viên</option>
+                            <option value="@NewsApplication.Models.User.INSPECTOR">Người Kiểm duyệt</option>
+                            <option value="@NewsApplication.Models.User.NORMAL">Người dùng thông thường</option>
+                            <option value="@NewsApplication.Models.User.JOURNALIST">Người đăng bài</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-outline-warning">Gán quyền</button>
+                    </div>
+                </form>
+            </div>
+            @if (Context.Request.UrlReferrer != null)
+            {
+                <div><a class="btn btn-link" href="@Url.Action("Index", "UserManage")">về danh sách</a></div>
+            }
+        </div>
+    </div>
+</div>

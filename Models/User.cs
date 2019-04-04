@@ -64,6 +64,23 @@ namespace NewsApplication.Models
                     return "";
             }
         }
+        public bool GrantRole(int role)
+        {
+            this.connection.Update("user", new SortedList<string, IDBDataType>()
+            {
+                {"role", new DBNumber(role)}
+            }, "id=" + this.id);
+            return true;
+        }
+        public User CheckValidForRole()
+        {
+            if (this.role != ADMIN && this.role != JOURNALIST && this.role != INSPECTOR && this.role != NORMAL)
+            {
+                this.errorsmap["role"] = "Quyền người dùng không hợp lệ!";
+            }
+            return this;
+        }
+
         public bool CheckValid()
         {
             //Check username: Min: 6, Max: 50 Regex

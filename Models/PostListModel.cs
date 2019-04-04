@@ -110,5 +110,91 @@ namespace NewsApplication.Models
             }
             return this.list;
         }
+
+        public List<Post> GetWhereSortBy(string w, string o = null)
+        {
+            list.Clear();
+            List<int> ids = new List<int>();
+
+            if (o == null)
+            {
+                using (IDataReader result = connection.select("*").from("post").where(w).Execute())
+                {
+                    while (result.Read())
+                    {
+                        ids.Add((int)result["id"]);
+                    }
+                }
+            }
+            else
+            {
+                using (IDataReader result = connection.select("*").from("post").where(w).orderby(o).Execute())
+                {
+                    while (result.Read())
+                    {
+                        ids.Add((int)result["id"]);
+                    }
+                }
+            }
+
+            foreach (int id in ids)
+            {
+                Post post = new Post(this.connection);
+                post.id = id;
+                post.Load();
+                list.Add(post);
+            }
+            return list;
+        }
+        public int GetTotalPageByCategory(string c)
+        {
+            using (IDataReader result = this.connection.select("COUNT(*)").from("post").join("category").on("post.category_id=category.id").where("category.name=" + new DBString(c).SqlValue()).Execute())
+            {
+                result.Read();
+                return result.GetInt32(0);
+            }
+        }
+        public List<Post> GetByCategory(string c, string o = null)
+        {
+            list.Clear();
+            List<int> ids = new List<int>();
+
+            if (o == null)
+            {
+                using (IDataReader result = this.connection.select("post.id as post_id").from("post").join("category").on("post.category_id=category.id").where("post.valid = 1 and category.link=" + new DBString(c).SqlValue()).Execute())
+                {
+                    while (result.Read())
+                    {
+                        ids.Add((int)result["post_id"]);
+                    }
+                }
+            }
+            else
+            {
+                using (IDataReader result = this.connection.select("post.id as post_id").from("post").join("category").on("post.category_id=category.id").where("post.valid = 1 and category.link=" + new DBString(c).SqlValue()).order(o).Execute())
+                {
+                    while (result.Read())
+                    {
+                        ids.Add((int)result["post_id"]);
+                    }
+                }
+            }
+            
+
+            foreach (int id in ids)
+            {
+                Post post = new Post(connection);
+                post.id = id;
+                
+                post.LoadPost();
+                post.LoadCategory();
+                post.LoadInspector();
+                post.LoadJournalist();
+
+                list.Add(post);
+            }
+
+            return list;
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace NewsApplication.Library.Database
         IDatabaseUtility groupby(string s);
         IDatabaseUtility having(string s);
         IDatabaseUtility orderby(string s);
+        IDatabaseUtility order(string s);
         IDatabaseUtility asc();
         IDatabaseUtility desc();
         IDatabaseUtility limit(int f, int t);

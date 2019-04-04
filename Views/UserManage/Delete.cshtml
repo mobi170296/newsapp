@@ -1,1 +1,73 @@
-﻿
+﻿@model NewsApplication.Models.User
+@{
+    ViewBag.Title = "Xóa người dùng " + Model.username;
+}
+
+<div>
+    <div class="card">
+        <div class="card-header">
+            <h5>Thông tin người dùng cần xóa</h5>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                Nếu bạn xóa người dùng thì tất cả bài viết liên quan của người dùng này sẽ bị xóa
+            </div>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+            }
+            @if (ViewBag.ErrorsMap != null && ViewBag.ErrorsMap.Count != 0)
+            {
+                <div class="alert alert-danger">
+                    @foreach (string key in ViewBag.ErrorsMap.Keys)
+                    {
+                        <div>@ViewBag.ErrorsMap[key]</div>
+                    }
+                </div>
+            }
+            <table class="table table-borderless">
+                <tr>
+                    <th class="w-25">ID</th>
+                    <td>@Model.id</td>
+                </tr>
+                <tr>
+                    <th>Tên người dùng</th>
+                    <td>@Model.username</td>
+                </tr>
+                <tr>
+                    <th>Họ</th>
+                    <td>@Model.lastname</td>
+                </tr>
+                <tr>
+                    <th>Tên</th>
+                    <td>@Model.firstname</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>@Model.email</td>
+                </tr>
+                <tr>
+                    <th>Số điện thoại</th>
+                    <td>@Model.phone</td>
+                </tr>
+                <tr>
+                    <th>Quyền hiện tại</th>
+                    <td>@Model.GetRoleName()</td>
+                </tr>
+            </table>
+
+            <div class="form-group">
+                <form action="" method="post" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="id" value="@Model.id" />
+                    <div class="form-group">
+                        <button class="btn btn-outline-danger">Xóa người dùng</button>
+                    </div>
+                </form>
+            </div>
+            @if (Context.Request.UrlReferrer != null)
+            {
+                <div><a class="btn btn-link" href="@Url.Action("Index", "UserManage")">về danh sách</a></div>
+            }
+        </div>
+    </div>
+</div>

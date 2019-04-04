@@ -12,7 +12,7 @@ namespace NewsApplication.Library.Database
     {
         public MySqlConnection connection;
         public string cquery = "";
-        private string _select, _from, _join, _on, _where, _groupby, _having, _orderby, _order= "ASC", _limit;
+        private string _select, _from, _join, _on, _where, _groupby, _having, _orderby, _order, _limit;
         public long insert_id;
         public IDatabaseUtility select(string s)
         {
@@ -52,6 +52,11 @@ namespace NewsApplication.Library.Database
             return this;
         }
         public IDatabaseUtility orderby(string s)
+        {
+            this._orderby = s;
+            return this;
+        }
+        public IDatabaseUtility order(string s)
         {
             this._orderby = s;
             return this;
