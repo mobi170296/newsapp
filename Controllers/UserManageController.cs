@@ -27,6 +27,7 @@ namespace NewsApplication.Controllers
             }
 
 
+
             try
             {
                 Authenticate authenticate = new Authenticate(connection);
@@ -52,6 +53,10 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+            finally
+            {
+                connection.Close();
+            }
         }
         [HttpGet]
         public ActionResult GrantRole(int? id)
@@ -72,6 +77,7 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e;
                 return View("_errors");
             }
+
 
             try
             {
@@ -103,6 +109,10 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e;
                 return View("_errors");
             }
+            finally
+            {
+                connection.Close();
+            }
         }
         [HttpPost]
         public ActionResult GrantRole(User grantUser)
@@ -117,6 +127,7 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+
 
             User destUser = new User(connection);
             destUser.id = grantUser.id;
@@ -166,6 +177,10 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorsMap = e.Errors;
                 return View(destUser);
             }
+            finally
+            {
+                connection.Close();
+            }
         }
         [HttpGet]
         public ActionResult Delete(int? id)
@@ -186,6 +201,7 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e;
                 return View("_errors");
             }
+
 
             try
             {
@@ -216,6 +232,10 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e;
                 return View("_errors");
             }
+            finally
+            {
+                connection.Close();
+            }
         }
 
         [HttpPost]
@@ -231,6 +251,7 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+
 
             try
             {
@@ -277,6 +298,10 @@ namespace NewsApplication.Controllers
             {
                 ViewBag.ErrorsMap = e.Errors;
                 return View(deleteUser);
+            }
+            finally
+            {
+                connection.Close();
             }
         }
 	}

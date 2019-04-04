@@ -1,7 +1,7 @@
 ﻿@model List<NewsApplication.Models.Post>
 
 @{
-    ViewBag.Title = "";
+    ViewBag.Title = ViewBag.category.name;
 }
 
 
@@ -11,5 +11,102 @@
         Danh mục hiện tại rỗng
     </div>
 }else{
-    
+    <div class="alert alert-light"><h3>@ViewBag.category.name</h3></div>
+    <div style="background-color: #fff; padding: 1px;">
+
+    <div class="row mt-5 mb-5">
+            <div class="col-6 latest-news-left">
+                <div class="news-item news-item-large news-item-poster-top clearfix">
+                    @for (int i = 0; i < 1 && i < Model.Count; i++)
+                    {
+                        <div class="news-item-poster" style="background-image: url('@Model[i].poster.path')">
+
+                        </div>
+                        <div class="news-item-info">
+                            <div class="news-item-title">
+                                @Html.ActionLink(Model[i].title, "Index", "Posts", new { id=Model[i].id }, new { })
+                            </div>
+                            <div class="news-item-summary">
+                                @Model[i].summary
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-6 latest-news-right">
+                @for (int i = 1; i < 5 && i < Model.Count; ++i)
+                {
+                    <div class="news-item news-item-poster-left clearfix">
+                        <div class="news-item-poster" style="background-image: url('@Model[i].poster.path')">
+                        </div>
+                        <div class="news-item-info">
+                            <div class="news-item-title">
+                                @Html.ActionLink(Model[i].title, "Index", "Posts", new { id = Model[i].id }, new { })
+                            </div>
+                            <div class="news-item-summary">
+                                @Model[i].summary
+                            </div>
+                        </div>
+                    </div> 
+                }
+            </div>
+        </div>
+    <div class="row mb-5">
+        @for (int i = 5; i < 10 && i < Model.Count; i++)
+        {
+            <div class="news-item news-item-poster-top news-item-small clearfix w-20 p-3">
+                <div class="news-item-poster" style="background-image: url('@Model[i].poster.path')">
+
+                </div>
+                <div class="news-item-info">
+                    <div class="news-item-title">
+                        @Html.ActionLink(Model[i].title, "Index", "Posts", new { id = Model[i].id }, new { })
+                    </div>
+                    <div class="news-item-summary">
+                        @Model[i].summary
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-6">
+            @for (int i = 10; i < 15 && i < Model.Count; i++)
+            {
+                <div class="news-item news-item-poster-left clearfix mt-2">
+                    <div class="news-item-poster" style="background-image: url('@Model[i].poster.path')">
+
+                    </div>
+                    <div class="news-item-info">
+                        <div class="news-item-title">
+                            @Html.ActionLink(Model[i].title, "Index", "Posts", new { id = Model[i].id }, new { })
+                        </div>
+                        <div class="news-item-summary">
+                            @Model[i].summary
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-6">
+            @for (int i = 15; i < 20 && i < Model.Count; i++)
+            {
+                <div class="news-item news-item-poster-left clearfix">
+                    <div class="news-item-poster" style="background-image: url('@Model[i].poster.path')">
+
+                    </div>
+                    <div class="news-item-info">
+                        <div class="news-item-title">
+                            @Html.ActionLink(Model[i].title, "Index", "Posts", new { id = Model[i].id }, new { })
+                        </div>
+                        <div class="news-item-summary">
+                            @Model[i].summary
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+        <div class="text-center">@Html.Partial("pagepartition", (NewsApplication.Models.PagePartitionModel)ViewBag.pagepartition)</div>
+        </div>
 }

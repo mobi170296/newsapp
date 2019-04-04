@@ -28,5 +28,6 @@ namespace NewsApplication.Library.Database
         int Delete(string table, string where);
         IDataReader Query(string sql);
         long GetLastInsertedId();
+        void Close();
     }
 }

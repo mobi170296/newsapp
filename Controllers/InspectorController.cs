@@ -51,6 +51,10 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = "" + e;
                 return View("_errors");
             }
+            finally
+            {
+                connection.Close();
+            }
         }
         public ActionResult ApprovedList(int page = 1)
         {
@@ -75,7 +79,7 @@ namespace NewsApplication.Controllers
                 {
                     PostListModel list = new PostListModel(connection);
                     ViewBag.posts = list.GetWhere("valid=1", (page - 1) * 10, 10);
-                    ViewBag.pagepartition = new PagePartitionModel("ApprovedList", "Inspector", page, (int)Math.Ceiling(list.GetTotalWhere("valid=0")/10.0));
+                    ViewBag.pagepartition = new PagePartitionModel("ApprovedList", "Inspector", page, (int)Math.Ceiling(list.GetTotalWhere("valid=1")/10.0));
                     return View();
                 }
                 else
@@ -88,6 +92,10 @@ namespace NewsApplication.Controllers
             {
                 ViewBag.ErrorMessage = "" + e;
                 return View("_errors");
+            }
+            finally
+            {
+                connection.Close();
             }
         }
         public ActionResult ViewToApprove(int? id)
@@ -107,6 +115,7 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+
 
             try
             {
@@ -150,7 +159,13 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = "" + e.Message;
                 return View("_errors");
             }
+            finally
+            {
+                connection.Close();
+            }
         }
+
+
         public ActionResult Review(int? id)
         {
             if (id == null)
@@ -168,6 +183,7 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+
 
             try
             {
@@ -211,6 +227,10 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = "" + e.Message;
                 return View("_errors");
             }
+            finally
+            {
+                connection.Close();
+            }
         }
         public ActionResult Approve(int? id)
         {
@@ -230,6 +250,7 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+
 
             try
             {
@@ -264,6 +285,10 @@ namespace NewsApplication.Controllers
             {
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
+            }
+            finally
+            {
+                connection.Close();
             }
         }
     }

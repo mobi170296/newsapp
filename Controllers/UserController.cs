@@ -33,13 +33,17 @@ namespace NewsApplication.Controllers
                 else
                 {
                     ViewBag.ErrorMessage = "Bạn chưa đăng nhập";
-                    return View("_Error");
+                    return View("_errors");
                 }
             }
             catch (DBException e)
             {
                 ViewBag.ErrorMessage = e.Message;
-                return View("_Error");
+                return View("_errors");
+            }
+            finally
+            {
+                connection.Close();
             }
         }
         [HttpPost]
@@ -81,7 +85,7 @@ namespace NewsApplication.Controllers
                 else
                 {
                     ViewBag.ErrorMessage = "Bạn chưa đăng nhập";
-                    return View("_Error");
+                    return View("_errors");
                 }
             }catch(DBException e)
             {
@@ -91,6 +95,10 @@ namespace NewsApplication.Controllers
             {
                 ViewBag.ErrorsMap = e.Errors;
                 return View(user);
+            }
+            finally
+            {
+                connection.Close();
             }
         }
 
@@ -113,12 +121,16 @@ namespace NewsApplication.Controllers
                 else
                 {
                     ViewBag.ErrorMessage = "Bạn chưa đăng nhập không thể thay đổi mật khẩu";
-                    return View("_Error");
+                    return View("_errors");
                 }
             }catch(DBException e)
             {
                 ViewBag.ErrorMessage = e.Message;
-                return View("_Error");
+                return View("_errors");
+            }
+            finally
+            {
+                connection.Close();
             }
         }
         [HttpPost]
@@ -133,8 +145,10 @@ namespace NewsApplication.Controllers
             }catch(DBException e)
             {
                 ViewBag.ErrorMessage = e.Message;
-                return View("_Error");
+                return View("_errors");
             }
+
+
 
             try
             {
@@ -178,7 +192,7 @@ namespace NewsApplication.Controllers
                 else
                 {
                     ViewBag.ErrorMessage = "Bạn chưa đăng nhập";
-                    return View("_Error");
+                    return View("_errors");
                 }
             }catch(DBException e)
             {
@@ -188,6 +202,10 @@ namespace NewsApplication.Controllers
             {
                 ViewBag.ErrorsMap = e.Errors;
                 return View(user);
+            }
+            finally
+            {
+                connection.Close();
             }
         }
         [HttpGet]
@@ -213,7 +231,11 @@ namespace NewsApplication.Controllers
             catch (DBException e)
             {
                 ViewBag.ErrorMessage = e.Message;
-                return View("_Error");
+                return View("_errors");
+            }
+            finally
+            {
+                connection.Close();
             }
         }
         [HttpPost]
@@ -267,12 +289,16 @@ namespace NewsApplication.Controllers
             }catch(DBException e)
             {
                 ViewBag.ErrorMessage = e.Message;
-                return View("_Error");
+                return View("_errors");
             }catch(InputException e)
             {
                 ViewBag.ErrorMessage = e.Message;
                 ViewBag.ErrorsMap = e.Errors;
                 return View(input);
+            }
+            finally
+            {
+                connection.Close();
             }
         }
         [HttpGet]
@@ -285,7 +311,7 @@ namespace NewsApplication.Controllers
             }catch(DBException e)
             {
                 ViewBag.error = e.Message;
-                return View("_Error");
+                return View("_errors");
             }
 
             User user = new Authenticate(connection).GetUser();
@@ -295,6 +321,7 @@ namespace NewsApplication.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            connection.Close();
             return View();
         }
         [HttpPost]
@@ -308,8 +335,9 @@ namespace NewsApplication.Controllers
             catch(DBException e)
             {
                 ViewBag.ErrorMessage = e.Message;
-                return View("_Error");
+                return View("_errors");
             }
+
 
             User user = new Authenticate(connection).GetUser();
 
@@ -346,7 +374,11 @@ namespace NewsApplication.Controllers
                     }catch(DBException e)
                     {
                         ViewBag.error = e.Message;
-                        return View("~/Views/Shared/_Error.cshtml");
+                        return View("_errors");
+                    }
+                    finally
+                    {
+                        connection.Close();
                     }
                 }
                 else

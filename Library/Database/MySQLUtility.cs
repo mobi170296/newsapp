@@ -207,6 +207,9 @@ namespace NewsApplication.Library.Database
                 throw new DBException(e.Code, e.Message);
             }
         }
-
+        public void Close()
+        {
+            this.connection.Close();
+        }
     }
 }

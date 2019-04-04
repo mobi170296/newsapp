@@ -27,6 +27,7 @@ namespace NewsApplication.Controllers
                 return View("_errors");
             }
 
+
             try
             {
                 Authenticate authenticate = new Authenticate(connection);
@@ -51,6 +52,10 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+            finally
+            {
+                connection.Close();
+            }
         }
         [HttpGet]
         public ActionResult Add()
@@ -65,6 +70,8 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+
+
 
             try
             {
@@ -101,6 +108,10 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View();
             }
+            finally
+            {
+                connection.Close();
+            }
         }
         [HttpPost]
         [ValidateInput(false)]
@@ -116,6 +127,7 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+
 
 
             try
@@ -168,6 +180,10 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorsMap = e.Errors;
                 return View();
             }
+            finally
+            {
+                connection.Close();
+            }
         }
         [HttpPost]
         [ValidateInput(false)]
@@ -183,6 +199,8 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+
+
 
             Post post = new Post(connection);
             try
@@ -277,7 +295,12 @@ namespace NewsApplication.Controllers
                 newdata.poster = post.poster;
                 return View(newdata);
             }
+            finally
+            {
+                connection.Close();
+            }
         }
+
         [HttpGet]
         public ActionResult Update(int? id)
         {
@@ -297,6 +320,8 @@ namespace NewsApplication.Controllers
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
             }
+
+
 
             try
             {
@@ -333,6 +358,10 @@ namespace NewsApplication.Controllers
             {
                 ViewBag.ErrorMessage = e.Message;
                 return View("_errors");
+            }
+            finally
+            {
+                connection.Close();
             }
         }
     }

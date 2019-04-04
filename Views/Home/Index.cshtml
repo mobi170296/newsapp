@@ -1,3 +1,54 @@
-﻿@{ 
+﻿@using NewsApplication.Models
+@model List<List<NewsApplication.Models.Post>>
+
+@{ 
     ViewBag.Title = "Trang chủ";
+}
+
+
+@{
+    if (ViewBag.categories.Count == 0)
+{
+    <div class="alert alert-info">
+        Chưa có danh mục nào
+    </div>
+}
+else
+{
+    for(int i=0; i<ViewBag.categories.Count; i++)
+    {
+        
+            Category category = ViewBag.categories[i];
+            List<Post> posts = Model[i];
+        
+        <div class="card">
+            <div class="card-header">
+                @category.name
+            </div>
+            <div class="card-body">
+                @if (posts.Count == 0)
+                {
+                    <div class="alert alert-info w-100">Danh mục này chưa có tin</div>
+                }
+                else
+                {
+                    <div class="row">
+                    @for (int j = 0; j < posts.Count; j++)
+                    {
+                        <div class="news-item news-item-small news-item-poster-top w-20 p-3">
+                            <div class="news-item-poster" style="background-image: url('@posts[j].poster.path')"></div>
+                            <div class="news-item-info">
+                                <div class="news-item-title">@Html.ActionLink(posts[j].title, "Index", "Posts", new { id = posts[j].id }, new { })</div>
+                                <div class="news-item-summary">@posts[j].summary</div>
+                            </div>
+                        </div>
+                    }
+                        </div>
+                    <div>@Html.ActionLink("Xem thêm", "ListByCategory", "PostShow", new { category = category.link }, new {@class="btn btn-link"})</div>
+                }
+                
+            </div>
+        </div>
+    }
+}
 }

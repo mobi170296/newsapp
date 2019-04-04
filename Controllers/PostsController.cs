@@ -24,6 +24,7 @@ namespace NewsApplication.Controllers
                 return View("_errors");
             }
 
+
             try
             {
                 if (id == null)
@@ -59,7 +60,10 @@ namespace NewsApplication.Controllers
                 ViewBag.ERrorMessage = e.Message;
                 return View("_errors");
             }
-
+            finally
+            {
+                connection.Close();
+            }
 
         }
         
